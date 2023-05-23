@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "adm-app-for-lanchesplus",
+    "name": "Lanches+",
     "slug": "adm-app-for-lanchesplus",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "dev_victor.admappforlanchesplus"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4811dcd2-167a-4550-a16f-d1757ce32295"
+      }
     }
   }
 }

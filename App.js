@@ -1,13 +1,22 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import LoginScreen from './src/Components/LoginScreen';
+import Items from './src/Components/Items';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+  const [user, setUser] = useState(null)
+
+  if(!user){
+    return (
+      <LoginScreen setUser={setUser}/>
+    );
+  }else{
+    return (
+      <Items user={user}/>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
