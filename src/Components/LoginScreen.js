@@ -1,22 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, ImageBackground, Image } from 'react-native';
-import backgroundImage from '../Images/background.png'
+
+// Conexão com o banco
+import {login} from '../Connections/firebaseConfig'
+
+// Aplicação visual
 import logoImage from '../Images/logo.png'
-import { database } from '../Connections/firebaseConfig';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { ref, get } from 'firebase/database';
+import backgroundImage from '../Images/background.png'
 import Feather from 'react-native-vector-icons/Feather'
 
 const LoginScreen = ({setUser}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async () => {
    
     if(email != '' && password != ''){
-      login()
+      login(email, password, setLoading, setUser)
     }else{
 
       alert("Preencha os dados corretamente!")
@@ -25,61 +27,8 @@ const LoginScreen = ({setUser}) => {
 
   };
 
-  async function login(){
-
-    let boolean = false
-    const auth = getAuth();
-    let newEmail = email.toLowerCase()
-    newEmail = newEmail.replace(" ", "")
-
-    let userCredential;
-    await signInWithEmailAndPassword(auth, newEmail, password).then((user) => userCredential = user).catch(response => alert(response));
-
-    // Obter o ID do usuário logado
-    if(userCredential){
-      const userId = userCredential.user.uid;
-
-      // Exemplo de acesso a dados no Realtime Database
-      const userRef = ref(database, `usuarios/${userId}`);
-      let userData;
-  
-      await get(userRef).then((snapshot) => {
-  
-        userData = snapshot.val()
-        console.log(userData.cargo)
-
-      })
-
-      if(!userData){
-
-        boolean = false
-
-      } 
-  
-      if(userData.cargo != "Cliente"){
-
-        boolean = true;
-
-      }else{
-
-        alert("Seu login não condiz com os dados necessários")
-        boolean = false
-
-      }
-    }
-
-    if(boolean){
-
-      setUser(boolean)
-
-    }
-
-  }
-
-
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      <StatusBar hidden={true} />
       <View style={styles.container}>
         <Image source={logoImage} style={styles.logo} />
 
@@ -98,18 +47,18 @@ const LoginScreen = ({setUser}) => {
               style={[styles.input, {width: "79%", marginRight: "1%"}]}
               placeholder={showPassword? "•••••": "Senha"}
               placeholderTextColor="gray"
-              secureTextEntry={showPassword}
+              secureTextEntry={!showPassword}
               onChangeText={(text) => setPassword(text)}
               value={password}
             />
 
             <View style={[styles.passwordButton, {width: "20%"}]}>
-              {!showPassword ? <Feather style={[]} name='eye' size={25} color={'orange'} onPress={() => setShowPassword(!showPassword)}/> : <Feather style={[]} name='eye-off' size={25} color={"rgba(50,50,50, 0.6)"} onPress={() => setShowPassword(!showPassword)}/> }
+              {showPassword ? <Feather style={[]} name='eye' size={25} color={'orange'} onPress={() => setShowPassword(!showPassword)}/> : <Feather style={[]} name='eye-off' size={25} color={"rgba(50,50,50, 0.6)"} onPress={() => setShowPassword(!showPassword)}/>}
             </View>
 
           </View>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Entrar</Text>
+          <TouchableOpacity style={!loading? [styles.button]: [styles.button, {backgroundColor: "gray"}]} onPress={handleLogin} disabled={loading}>
+            <Text style={!loading? [styles.buttonText]: [styles.buttonText, {color: "lightgray"}]}> {loading? "Carregando...": "Entrar"} </Text>
           </TouchableOpacity>
         </View>
 
