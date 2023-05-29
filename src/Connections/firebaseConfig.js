@@ -131,7 +131,7 @@ async function handleAdd(setLoading, setProdutos, produto, handleClose, setProdu
   const productsRef = ref(database, 'produtos/');
   
   console.log(produto.nome +""+ produto.preco +""+ produto.imagem)
-  if(produto.nome != "" || produto.preco != "" || produto.imagem != ""){
+  if(produto.nome != "" && produto.preco != "" && produto.imagem != "" && produto.ingredientes != "" && produto.descricao != ""){
     // Atualizar o banco de dados com o novo array de produtos
 
     await push(productsRef, produto)

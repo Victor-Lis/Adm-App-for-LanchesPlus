@@ -29,7 +29,9 @@ export default function Items({user}) {
         nome: "",
         preco: "",
         tipo: "L",
-        imagem: ""
+        ingredientes: "",
+        descricao: "",
+        imagem: "",
 
     })
     const [produtos, setProdutos] = useState([])

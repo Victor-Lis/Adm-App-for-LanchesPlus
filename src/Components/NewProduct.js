@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   View,
+  ScrollView,
   Text,
   TouchableOpacity,
   Image,
@@ -27,7 +28,11 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
         onRequestClose={() => handleClose()}
     >
         <ImageBackground style={styles.modalContainer} source={backgroundImage2}>
-          <View style={styles.modalContent}>
+          <ScrollView
+            vertical={true}
+            contentContainerStyle={[selectedImage? {alignItems: "center", justifyContent: "center", height: 1100}: {alignItems: "center", justifyContent: "center", height: 800}]}
+          >
+           <View style={styles.modalContent}>
 
             <View style={styles.rowModalTitle}>
 
@@ -39,7 +44,10 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
 
             </View>
 
-                <Text style={[styles.modalTitle]}>Adicionar Produto</Text>
+              <Text style={[styles.modalTitle]}>Adicionar Produto</Text>
+
+
+              <Text style={styles.subTitle}>Imagem</Text>
 
             {selectedImage &&
                 <View style={styles.modalImageBox}>
@@ -61,6 +69,8 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
                 <Text style={selectedImage? [styles.optionText, {color: 'rgba(255,255,255,.91)'}]: styles.optionText}>Selecione uma imagem {selectedImage && <Feather name='check-circle' color={'rgba(255,255,255,.91)'}/>}</Text>
 
             </TouchableOpacity>
+
+            <Text style={styles.subTitle}>Informações</Text>
       
             <TextInput
                 style={[styles.modalInput, {marginBottom: 5}]}
@@ -72,7 +82,7 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
                 maxLength={20}
             />
             <TextInput
-                style={styles.modalInput}
+                style={[styles.modalInput, {marginBottom: 5}]}
                 placeholder="Preço"
                 onChangeText={(text) =>
                     setProduto((prevProduct) => ({ ...prevProduct, preco: text.replace("-", "") }))
@@ -80,6 +90,26 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
                 value={produto.preco}
                 keyboardType='numeric'
             />
+
+            <TextInput
+                style={[styles.modalInput, {marginBottom: 5}]}
+                placeholder="Ingredientes"
+                onChangeText={(text) =>
+                    setProduto((prevProduct) => ({ ...prevProduct, ingredientes: text }))
+                }
+                value={produto.ingredientes}
+            />
+
+            <TextInput
+                style={styles.modalInput}
+                placeholder="Descrição"
+                onChangeText={(text) =>
+                    setProduto((prevProduct) => ({ ...prevProduct, descricao: text }))
+                }
+                value={produto.descricao}
+            />
+
+            <Text style={styles.subTitle}>Tipo</Text>
 
             <TouchableOpacity
               style={[styles.optionButton, produto.tipo === 'L' && styles.selectedOption]}
@@ -102,8 +132,9 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
                 <Text style={produto.tipo === 'R'? [styles.optionText, {color: 'rgba(255,255,255,.91)'}]: styles.optionText}> Refrigerante {produto.tipo === 'R' && <Feather name='check-circle' color={'rgba(255,255,255,.91)'}/>}</Text>
             </TouchableOpacity>
 
-            <Button title={loading? "Carregando...": "Adicionar"} onPress={() => handleAdd(setLoading, setProdutos, produto, handleClose, setProduto)} disabled={loading}/>
-          </View>
+            <Button style={{marginBottom: 50}} title={loading? "Carregando...": "Adicionar"} onPress={() => handleAdd(setLoading, setProdutos, produto, handleClose, setProduto)} disabled={loading}/>
+           </View>
+          </ScrollView>
         </ImageBackground>
     </Modal>
   );
@@ -116,13 +147,22 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
+    subTitle: {
+
+      textAlign: "left",
+      marginVertical: 10,
+      fontWeight: "bold",
+      fontSize: 18.5,
+      color: "rgba(0,0,0,0.8)"
+
+    },
     modalContent: {
       backgroundColor: 'rgba(255,255,255,.91)',
       borderWidth: 1,
       borderColor: '#000',
       padding: 20,
       borderRadius: 8,
-      width: '80%',
+      width: '90%',
     },
     rowModalTitle: {
 
