@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -13,13 +13,44 @@ import {
 } from 'react-native';
 
 // Conexão com o banco
-import { handleAdd } from '../Connections/firebaseConfig';
+import { handleAdd, handleEdit } from '../Connections/firebaseConfig';
 
 // Aplicação visual
 import backgroundImage2 from "../Images/background3.png"
 import Feather from 'react-native-vector-icons/Feather'
 
-export default function NewProduct({modalVisible, selectedImage, selectImage, setProduto, produto, loading, handleClose, setLoading, setProdutos}) {
+export default function NewProduct({modalVisible, selectedImage, selectImage, setProduto, produto, loading, handleClose, setLoading, setProdutos, produtos, index, editBoolean, setEditBoolean}){
+  
+  function handleUse(){
+
+    if(produto && editBoolean){
+
+      handleEdit(setLoading, setProdutos, handleClose, produtos, index, produto, setProduto)
+
+    }else{
+
+      handleAdd(setLoading, setProdutos, produto, handleClose, setProduto)
+    
+    }
+
+    setEditBoolean(false)
+
+  }
+
+  function handleCloseModal(){
+
+    setProduto({
+    
+      nome: "",
+      preco: "",
+      tipo: "L",
+      imagem: ""
+      
+    })
+    handleClose()
+
+  }
+
  return (
     <Modal
         visible={modalVisible}
@@ -36,9 +67,9 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
 
             <View style={styles.rowModalTitle}>
 
-                <TouchableOpacity onPress={() => handleClose()}>
+                <TouchableOpacity onPress={handleCloseModal}>
           
-                    <Feather name='x-circle' color={'red'} size={25}/>
+                    <Feather name='x' color={'red'} size={35}/>
 
                 </TouchableOpacity> 
 
@@ -132,7 +163,7 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
                 <Text style={produto.tipo === 'R'? [styles.optionText, {color: 'rgba(255,255,255,.91)'}]: styles.optionText}> Refrigerante {produto.tipo === 'R' && <Feather name='check-circle' color={'rgba(255,255,255,.91)'}/>}</Text>
             </TouchableOpacity>
 
-            <Button style={{marginBottom: 50}} title={loading? "Carregando...": "Adicionar"} onPress={() => handleAdd(setLoading, setProdutos, produto, handleClose, setProduto)} disabled={loading}/>
+            <Button style={{marginBottom: 50}} title={loading? "Carregando...": "Adicionar"} onPress={() => handleUse()} disabled={loading}/>
            </View>
           </ScrollView>
         </ImageBackground>

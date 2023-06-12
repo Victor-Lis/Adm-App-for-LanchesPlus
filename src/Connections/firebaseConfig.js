@@ -3,6 +3,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, get, set, push } from 'firebase/database';
 import { getStorage, ref as storageref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const firebaseConfig = {
     apiKey: "AIzaSyBoRVeP8zoNJo-BTQB2kuGt7mfWWNgyFzk",
     authDomain: "lanches-website.firebaseapp.com",
@@ -19,14 +21,13 @@ const app = initializeApp(firebaseConfig);
 // Obtenção da instância do Realtime Database
 const database = getDatabase(app);
 
-
-
 // Função para acessar o App, através do login
 async function login(email, password, setLoading, setUser){
 
     setLoading(true)
 
     let boolean = false
+    let userId
     const auth = getAuth();
     let newEmail = email.toLowerCase()
     newEmail = newEmail.replace(" ", "")
@@ -36,7 +37,7 @@ async function login(email, password, setLoading, setUser){
 
     // Obter o ID do usuário logado
     if(userCredential){
-      const userId = userCredential.user.uid;
+      userId = userCredential.user.uid;
 
       // Exemplo de acesso a dados no Realtime Database
       const userRef = ref(database, `usuarios/${userId}`);
@@ -69,7 +70,8 @@ async function login(email, password, setLoading, setUser){
 
     if(boolean){
 
-      setUser(boolean)
+      await AsyncStorage.setItem('@useruid', userId)
+      setUser(userId)
 
     }
     setLoading(false)
@@ -155,6 +157,30 @@ async function handleAdd(setLoading, setProdutos, produto, handleClose, setProdu
   setLoading(false)
 }
 
+// Função que "edita" o lanche no banco de dados
+async function handleEdit(setLoading, setProdutos, handleClose, produtos, index, datas, setProduto){
+  setLoading(true)
+  const database = getDatabase(app);
+  const productsRef = ref(database, 'produtos/');
+
+  // Atualizar o banco de dados com o novo array de produtos
+  setProdutos(produtos.splice(index, 1, datas))
+
+  await set(productsRef, produtos)
+  // Obter os dados atualizados do banco de dados
+  getDatas(setLoading, setProdutos);
+  setProduto({
+    
+    nome: "",
+    preco: "",
+    tipo: "L",
+    imagem: ""
+    
+  })
+  setLoading(false)
+  handleClose()
+}
+
 // Função que exclui um item da lista, trabalhando como se fosse um array
 async function handleDelete(setLoading, setProdutos, produtos, index){
   setLoading(true)
@@ -170,4 +196,29 @@ async function handleDelete(setLoading, setProdutos, produtos, index){
   setLoading(false)
 }
 
-export { database, login, getDatas, handleAdd, handleDelete, setImage, app };
+
+// Função que recebe dados do usuário
+async function getUserDatas(setLoading, userUid, setDatas){
+
+  setLoading(true)
+  const database = getDatabase(app);
+  const userRef = ref(database, `usuarios/${userUid}`);
+  setDatas()
+
+  console.log(setLoading)
+  console.log(userUid)
+  console.log(setDatas)
+  
+  await get(userRef).then((snapshot, index) => {
+    
+    console.log(snapshot.val())
+    if(snapshot.exists()){
+      setDatas(snapshot.val())
+    }
+
+  })
+  setLoading(false)
+
+}
+
+export { database, login, getDatas, handleAdd, handleDelete, setImage, handleEdit, getUserDatas };

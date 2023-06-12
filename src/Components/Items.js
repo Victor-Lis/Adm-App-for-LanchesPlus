@@ -3,9 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
 
 // Conexão com o banco
@@ -15,12 +15,13 @@ import { setImage, getDatas, } from '../Connections/firebaseConfig'
 import * as ImagePicker from 'expo-image-picker';
 
 // Componentes
-import Item from './Item';
 import NewProduct from './NewProduct';
+import RenderItems from './RenderItems';
 
 // Aplicação visual
 import Feather from 'react-native-vector-icons/Feather'
 import backgroundImage from "../Images/background2.png"
+
 
 export default function Items({user}) {
     const [modalVisible, setModalVisible] = useState(false)
@@ -37,6 +38,8 @@ export default function Items({user}) {
     const [produtos, setProdutos] = useState([])
     const [loading, setLoading] = useState(false)
     const [selectedImage, setSelectedImage] = useState(null);
+    const [indexToEdit, setIndexToEdit] = useState(null)
+    const [editBoolen, setEditBoolean] = useState(false)
 
     const selectImage = async () => {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -70,30 +73,15 @@ export default function Items({user}) {
     }, [user]);
   
     return (
-      <ImageBackground  style={styles.container} source={backgroundImage}>
+      <ImageBackground style={styles.container} source={backgroundImage}>
 
-        <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
 
-          {!loading?(
-                  
-            <FlatList
-                data={produtos}
-                renderItem={({item, index}) => (
-                  <Item data={item} index={index} setLoading={setLoading} setProdutos={setProdutos} produtos={produtos}/>
-                )}
-            />
+          <RenderItems loading={loading} titulo={"Lanches"} produtos={produtos} tipo={"L"} setModalVisible={setModalVisible} setDatasToEdit={setProduto} setIndexToEdit={setIndexToEdit} setSelectedImage={setSelectedImage} setLoading={setLoading} setProdutos={setProdutos} setEditBoolean={setEditBoolean}/>
+          <RenderItems loading={loading} titulo={"Acompanhamentos"} produtos={produtos} tipo={"A"} setModalVisible={setModalVisible} setDatasToEdit={setProduto} setIndexToEdit={setIndexToEdit} setSelectedImage={setSelectedImage} setLoading={setLoading} setProdutos={setProdutos} setEditBoolean={setEditBoolean}/>
+          <RenderItems loading={loading} titulo={"Refrigerantes"} produtos={produtos} tipo={"R"} setModalVisible={setModalVisible} setDatasToEdit={setProduto} setIndexToEdit={setIndexToEdit} setSelectedImage={setSelectedImage} setLoading={setLoading} setProdutos={setProdutos} setEditBoolean={setEditBoolean}/>
 
-          ):(
-
-              <View style={styles.loadingBox}>
-
-                <Feather name="loader" size={30} color="#fff"/>
-
-              </View> 
-
-          )}
-
-        </View>
+        </ScrollView>
   
         <TouchableOpacity
           style={styles.addButton}
@@ -111,6 +99,11 @@ export default function Items({user}) {
           produto={produto} 
           loading={loading} 
           handleClose={handleClose}
+          produtos={produtos}
+          index={indexToEdit}
+          setSelectedImage={setSelectedImage}
+          editBoolean={editBoolen}
+          setEditBoolean={setEditBoolean}
         />
       </ImageBackground>
     );
@@ -120,13 +113,6 @@ export default function Items({user}) {
     container: {
       flex: 1,
       backgroundColor: '#fff',
-    },
-    loadingBox: {
-
-      width: "100%",
-      justifyContent: "center",
-      alignItems: "center"
-
     },
     addButton: {
       backgroundColor: 'orange',
