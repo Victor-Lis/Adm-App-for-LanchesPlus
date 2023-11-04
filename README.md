@@ -154,9 +154,9 @@ async function setImage(uri, setProduto){
 
 ![Login](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Login.jpg)
 
-![Home](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/mmaster/src/Screenshots/Home.jpg)
+![Home](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Home.jpg)
 
-![Home 2](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/mmaster/src/Screenshots/Home%202.jpg)
+![Home 2](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Home%202.jpg)
 
 ![Home Edit](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Home%20Edit.jpg)
 
