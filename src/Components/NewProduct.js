@@ -77,7 +77,6 @@ export default function NewProduct({modalVisible, selectedImage, selectImage, se
 
               <Text style={[styles.modalTitle]}>Adicionar Produto</Text>
 
-
               <Text style={styles.subTitle}>Imagem</Text>
 
             {selectedImage &&

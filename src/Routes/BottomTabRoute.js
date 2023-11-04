@@ -10,12 +10,6 @@ import UserScreen from '../Components/UserScreen';
 
 export default function BottomTabRoute({userUid, setUser}) {
 
-    useEffect(() => {
-
-        console.log(userUid)
-
-    }, [])
-
  return (
     <Tab.Navigator>
         <Tab.Screen
