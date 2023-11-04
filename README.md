@@ -111,17 +111,13 @@ async function getUserUid(){
   let userid = await AsyncStorage.getItem('@useruid')
     
   if(userid){
-
     setUser(userid)
-
   }
 
 }
 
 useEffect(() => {
-
   getUserUid()
-
 }, [])
 ```
 
