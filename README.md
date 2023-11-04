@@ -152,7 +152,6 @@ async function setImage(uri, setProduto){
 
 # Screenshot
 
-<center>
 ![Login](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Login.jpg)
 
 ![Home](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Home.jpg)
@@ -164,7 +163,6 @@ async function setImage(uri, setProduto){
 ![Modal](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/Modal.jpg)
 
 ![User](https://github.com/Victor-Lis/Adm-App-for-LanchesPlus/blob/master/src/Screenshots/User.jpg)
-</center>
 
 ## Mais
 
