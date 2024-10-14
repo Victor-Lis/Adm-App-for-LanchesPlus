@@ -4,6 +4,8 @@ import { BarCodeScanner, BarCodeSize } from 'expo-barcode-scanner';
 import backgroundImage from "../Images/background2.png"
 import ItemPedido from './ItemPedido';
 
+import { Buffer } from 'node:buffer';
+
 export default function PedidosScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(true);
@@ -42,11 +44,14 @@ export default function PedidosScreen() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    const objetoDecodificado = atob(data);
-    const objetoJSONParse = JSON.parse(objetoDecodificado)
-    console.log(objetoJSONParse)
-    setPedido(objetoJSONParse)
-    setFirst(false)
+
+    // console.log(data)
+    const objetoDecodificado = Buffer.from(data, 'base64').toString()
+    // const objetoDecodificado = atob(data);
+    console.log(objetoDecodificado);
+    const objetoJSONParse = JSON.parse(objetoDecodificado);
+    setPedido(objetoJSONParse);
+    setFirst(false);
   };
 
   if (hasPermission === null) {
